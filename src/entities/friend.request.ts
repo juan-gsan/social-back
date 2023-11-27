@@ -1,4 +1,4 @@
-import { RequestStatus } from '../types/requestStatus.js';
+import { RequestStatus } from '../types/request.status.js';
 import { Profile } from './profile.js';
 
 export interface FriendRequest {
