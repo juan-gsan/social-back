@@ -1,7 +1,7 @@
 import http from 'http';
-import { app } from './app';
-import { dbConnect } from './db/db.connect';
-import { port } from './config';
+import { app } from './app.js';
+import { dbConnect } from './db/db.connect.js';
+import { port } from './config.js';
 import createDebug from 'debug';
 
 const debug = createDebug('SOCIALNETWORK:SERVER');
