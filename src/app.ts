@@ -2,6 +2,7 @@ import express from 'express';
 import { userRouter } from './routers/user.router.js';
 import cors from 'cors';
 import morgan from 'morgan';
+import { profileRouter } from './routers/profile.router.js';
 export const app = express();
 
 const corsOptions = { origin: '*' };
@@ -14,3 +15,4 @@ app.get('/', (req, res) => {
 });
 
 app.use(`/user`, userRouter);
+app.use('/profile', profileRouter);

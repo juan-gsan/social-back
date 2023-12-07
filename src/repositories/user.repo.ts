@@ -2,7 +2,7 @@ import { User } from '../entities/user.js';
 import { UserModel } from '../models/user.model.js';
 import createDebug from 'debug';
 
-const debug = createDebug('SOCIALNETWORK:REPO');
+const debug = createDebug('SOCIALNETWORK:USERREPO');
 export class UserRepo {
   constructor() {
     debug('Instantiated');

@@ -1,18 +1,17 @@
 import { NextFunction, Request, Response } from 'express';
-import { UserRepo } from '../repositories/user.repo.js';
 import createDebug from 'debug';
-import { AuthServices } from '../services/auth.js';
+import { ProfileRepo } from '../repositories/profile.repo.js';
 
-const debug = createDebug('SOCIALNETWORK:USERCONTROLLER');
-export class UserController {
-  constructor(protected userRepo: UserRepo) {
+const debug = createDebug('SOCIALNETWORK:PROFILECONTROLLER');
+export class ProfileController {
+  constructor(protected profileRepo: ProfileRepo) {
     debug('Instantiated');
-    this.userRepo = userRepo;
+    this.profileRepo = profileRepo;
   }
 
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const items = await this.userRepo.query();
+      const items = await this.profileRepo.query();
       res.status(200);
       res.send(items);
     } catch (error) {
@@ -22,7 +21,7 @@ export class UserController {
 
   async getById(req: Request, res: Response, next: NextFunction) {
     try {
-      const item = await this.userRepo.queryById(req.params.id);
+      const item = await this.profileRepo.queryById(req.params.id);
       res.status(200);
       res.send(item);
     } catch (error) {
@@ -32,9 +31,7 @@ export class UserController {
 
   async signUp(req: Request, res: Response, next: NextFunction) {
     try {
-      const password = await AuthServices.hash(req.body.password);
-      req.body.password = password;
-      const newItem = await this.userRepo.create(req.body);
+      const newItem = await this.profileRepo.create(req.body);
       res.status(201);
       res.send(newItem);
     } catch (error) {
