@@ -1,9 +1,12 @@
-import { User } from '../entities/user';
-import { UserModel } from '../models/user.model';
+import { User } from '../entities/user.js';
+import { UserModel } from '../models/user.model.js';
+import createDebug from 'debug';
 
+const debug = createDebug('SOCIALNETWORK:REPO');
 export class UserRepo {
-  // eslint-disable-next-line no-useless-constructor
-  constructor() {}
+  constructor() {
+    debug('Instantiated');
+  }
 
   async query(): Promise<User[]> {
     const result = await UserModel.find().exec();

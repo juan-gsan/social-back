@@ -1,8 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
-import { UserRepo } from '../repositories/user.repo';
+import { UserRepo } from '../repositories/user.repo.js';
+import createDebug from 'debug';
 
+const debug = createDebug('SOCIALNETWORK:CONTROLLER');
 export class UserController {
   constructor(protected userRepo: UserRepo) {
+    debug('Instantiated');
     this.userRepo = userRepo;
   }
 

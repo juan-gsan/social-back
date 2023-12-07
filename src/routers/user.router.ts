@@ -1,5 +1,5 @@
-import { UserController } from '../controllers/user.controller';
-import { UserRepo } from '../repositories/user.repo';
+import { UserController } from '../controllers/user.controller.js';
+import { UserRepo } from '../repositories/user.repo.js';
 import { Router as createRouter } from 'express';
 
 const repo = new UserRepo();
