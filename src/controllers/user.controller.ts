@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { UserRepo } from '../repositories/user.repo.js';
 import createDebug from 'debug';
-import { AuthServices } from '../services/auth.js';
+import { AuthServices, PayloadToken } from '../services/auth.js';
+import { LoginResponse } from '../types/login.response.js';
 
 const debug = createDebug('SOCIALNETWORK:USERCONTROLLER');
 export class UserController {
@@ -37,6 +38,42 @@ export class UserController {
       const newItem = await this.userRepo.create(req.body);
       res.status(201);
       res.send(newItem);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async logIn(req: Request, res: Response, next: NextFunction) {
+    try {
+      if (!req.body.email || !req.body.password)
+        throw new Error('400 Bad Request');
+
+      const data = await this.userRepo.search({
+        key: 'email',
+        value: req.body.email,
+      });
+
+      if (!data.length) throw new Error('400 Bad Request');
+
+      const checkPassword = await AuthServices.compare(
+        req.body.password,
+        data[0].password
+      );
+
+      if (!checkPassword) throw new Error('400 Bad Request');
+
+      const payload: PayloadToken = {
+        id: data[0].id,
+        email: data[0].email,
+      };
+
+      const token = AuthServices.createJWT(payload);
+      const response: LoginResponse = {
+        token,
+        userId: data[0].id,
+      };
+
+      res.send(response);
     } catch (error) {
       next(error);
     }

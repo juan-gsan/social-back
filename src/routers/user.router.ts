@@ -10,3 +10,4 @@ export const userRouter = createRouter();
 userRouter.get('/', controller.getAll.bind(controller));
 userRouter.get('/:id', controller.getById.bind(controller));
 userRouter.post('/', controller.signUp.bind(controller));
+userRouter.patch('/', controller.logIn.bind(controller));

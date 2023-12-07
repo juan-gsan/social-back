@@ -23,4 +23,24 @@ export class UserRepo {
     const newUser = await UserModel.create(data);
     return newUser;
   }
+
+  async search({
+    key,
+    value,
+  }: {
+    key: string;
+    value: unknown;
+  }): Promise<User[]> {
+    const result = await UserModel.find({ [key]: value }).exec();
+    return result;
+  }
+
+  async update(id: string, data: Partial<User>): Promise<User> {
+    const newUser = await UserModel.findByIdAndUpdate(id, data, {
+      new: true,
+    }).exec();
+    if (newUser === null) throw new Error('404 Not Found');
+
+    return newUser;
+  }
 }
