@@ -23,4 +23,17 @@ export class ProfileRepo {
     const newProfile = await ProfileModel.create(data);
     return newProfile;
   }
+
+  async update(id: string, data: Partial<Profile>): Promise<Profile> {
+    const updatedItem = await ProfileModel.findByIdAndUpdate(id, data, {
+      new: true,
+    }).exec();
+    if (updatedItem === null) throw new Error('404 Not Found');
+    return updatedItem;
+  }
+
+  async delete(id: string): Promise<void> {
+    const result = await ProfileModel.findByIdAndDelete(id).exec();
+    if (result === null) throw new Error('404 Not Found');
+  }
 }

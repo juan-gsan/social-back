@@ -78,4 +78,16 @@ export class UserController {
       next(error);
     }
   }
+
+  async changePassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const newPassword = await AuthServices.hash(req.body.password);
+      req.body.password = newPassword;
+      const updatedUser = await this.userRepo.update(req.params.id, req.body);
+      res.status(200);
+      res.send(updatedUser);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

@@ -43,4 +43,9 @@ export class UserRepo {
 
     return newUser;
   }
+
+  async delete(id: string): Promise<void> {
+    const result = await UserModel.findByIdAndDelete(id).exec();
+    if (result === null) throw new Error('404 Not Found');
+  }
 }
