@@ -3,7 +3,7 @@ import { secret } from '../config.js';
 import { compare, hash } from 'bcrypt';
 
 export type PayloadToken = {
-  id: string;
+  userId: string;
   email: string;
 } & jwt.JwtPayload;
 

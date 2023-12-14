@@ -3,12 +3,14 @@ import { UserRepo } from '../repositories/user.repo.js';
 import createDebug from 'debug';
 import { AuthServices, PayloadToken } from '../services/auth.js';
 import { LoginResponse } from '../types/login.response.js';
+import { CodeRepo } from '../repositories/code.repo.js';
 
 const debug = createDebug('SOCIALNETWORK:USERCONTROLLER');
 export class UserController {
-  constructor(protected userRepo: UserRepo) {
+  constructor(protected userRepo: UserRepo, protected codeRepo: CodeRepo) {
     debug('Instantiated');
     this.userRepo = userRepo;
+    this.codeRepo = codeRepo;
   }
 
   async getAll(req: Request, res: Response, next: NextFunction) {
@@ -63,7 +65,7 @@ export class UserController {
       if (!checkPassword) throw new Error('400 Bad Request');
 
       const payload: PayloadToken = {
-        id: data[0].id,
+        userId: data[0].id,
         email: data[0].email,
       };
 
@@ -83,7 +85,17 @@ export class UserController {
     try {
       const newPassword = await AuthServices.hash(req.body.password);
       req.body.password = newPassword;
-      const updatedUser = await this.userRepo.update(req.params.id, req.body);
+
+      const userCode = await this.codeRepo.search({
+        key: '_id',
+        value: req.params.id,
+      });
+
+      if (!userCode) throw new Error('404 Invalid User');
+
+      const currentUser = userCode[0].user;
+
+      const updatedUser = await this.userRepo.update(currentUser.id, req.body);
       res.status(200);
       res.send(updatedUser);
     } catch (error) {
