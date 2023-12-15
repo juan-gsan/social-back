@@ -4,7 +4,6 @@ import { UserRepo } from './user.repo';
 jest.mock('../models/user.model');
 describe('Given a UserRepo', () => {
   let userRepo: UserRepo;
-
   beforeEach(() => {
     userRepo = new UserRepo();
   });
@@ -70,6 +69,41 @@ describe('Given a UserRepo', () => {
       const result = await userRepo.delete('test');
       expect(exec).toHaveBeenCalled();
       expect(result).not.toBeNull();
+    });
+  });
+});
+
+describe('Given a UserRepo', () => {
+  let userRepo: UserRepo;
+  let error: Error;
+  beforeEach(() => {
+    userRepo = new UserRepo();
+  });
+
+  describe('When queryById method is used and there is no result', () => {
+    test('Then an error should be thrown', async () => {
+      error = Error('404 Not Found');
+      const exec = jest.fn().mockResolvedValueOnce(null);
+      UserModel.findById = jest.fn().mockReturnValueOnce({ exec });
+      await expect(userRepo.queryById('error')).rejects.toThrow(error);
+    });
+  });
+
+  describe('When update method is used and there is no result', () => {
+    test('Then an error should be thrown', async () => {
+      error = Error('404 Not Found');
+      const exec = jest.fn().mockResolvedValueOnce(null);
+      UserModel.findByIdAndUpdate = jest.fn().mockReturnValueOnce({ exec });
+      await expect(userRepo.update('error', {})).rejects.toThrow(error);
+    });
+  });
+
+  describe('When delete method is used and there is no result', () => {
+    test('Then an error should be thrown', async () => {
+      error = Error('404 Not Found');
+      const exec = jest.fn().mockResolvedValueOnce(null);
+      UserModel.findByIdAndDelete = jest.fn().mockReturnValueOnce({ exec });
+      await expect(userRepo.delete('error')).rejects.toThrow(error);
     });
   });
 });
