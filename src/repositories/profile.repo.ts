@@ -24,6 +24,17 @@ export class ProfileRepo {
     return newProfile;
   }
 
+  async search({
+    key,
+    value,
+  }: {
+    key: string;
+    value: unknown;
+  }): Promise<Profile[]> {
+    const result = await ProfileModel.find({ [key]: value }).exec();
+    return result;
+  }
+
   async update(id: string, data: Partial<Profile>): Promise<Profile> {
     const updatedItem = await ProfileModel.findByIdAndUpdate(id, data, {
       new: true,
